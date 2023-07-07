@@ -8,6 +8,7 @@ import AuthNavigator from "./app/navigation/AuthNavigator";
 import { useEffect, useState } from "react";
 import AuthContext from "./app/auth/context";
 import authStorage from "./app/auth/storage";
+import UploadScreen from "./app/screens/UploadScreen";
 
 export default function App() {
   const [user, setUser] = useState();

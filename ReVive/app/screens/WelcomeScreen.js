@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 
 import AppButton from "../components/AppButton";
 import routes from "../navigation/routes";
@@ -11,7 +11,7 @@ function WelcomeScreen({ navigation }) {
       <View style={styles.logoContainer}>
         <Image
           style={styles.logo}
-          source={require("../assets/logo-blue.png")}
+          source={require("../assets/logo/logo-blue.png")}
         />
         <Text style={styles.tagLine}>Reviving Used Treasures</Text>
       </View>

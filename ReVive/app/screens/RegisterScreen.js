@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import * as Yup from "yup";
 
 import Screen from "../components/Screen";
@@ -10,11 +10,7 @@ import {
   SubmitButton,
 } from "../components/forms";
 
-import usersApi from "../api/users";
-import authApi from "../api/auth";
-
 import useAuth from "../auth/useAuth";
-import useApi from "../hooks/useApi";
 import ActivityIndicator from "../components/ActivityIndicator";
 import { View } from "react-native";
 import colors from "../config/colors";
@@ -26,31 +22,25 @@ const validationSchema = Yup.object().shape({
 });
 
 function RegisterScreen() {
-  const registerApi = useApi(usersApi.register);
-  const loginApi = useApi(authApi.login);
-  const auth = useAuth();
+  const { logIn } = useAuth();
   const [error, setError] = useState();
-
-  const handlesubmit = async (userInfo) => {
-    const result = await registerApi.request(userInfo);
-
-    if (!result.ok) {
-      if (result.data) setError(result.data.error);
-      else {
-        setError("An unexpected error occured.");
-        console.log(result);
-      }
-      return;
-    }
-    const { data: authToken } = await loginApi.request(
-      userInfo.email,
-      userInfo.password
-    );
-    auth.logIn(authToken);
+  const [loading, setLoading] = useState(false);
+  const handlesubmit = async ({ name, email, password }) => {
+    setLoading(true);
+    const user = {
+      id: 3,
+      name,
+      email,
+      password,
+    };
+    logIn(user);
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
   };
   return (
     <>
-      <ActivityIndicator visible={registerApi.loading || loginApi.loading} />
+      <ActivityIndicator visible={loading} />
       <Screen style={styles.screen}>
         <View style={styles.container}>
           <AppForm

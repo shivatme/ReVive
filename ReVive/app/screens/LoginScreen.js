@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import * as Yup from "yup";
 
 import Screen from "../components/Screen";
@@ -9,25 +9,29 @@ import {
   AppFormField,
   SubmitButton,
 } from "../components/forms";
-import authApi from "../api/auth";
 import useAuth from "../auth/useAuth";
 import colors from "../config/colors";
+import { getUsers } from "../store/users";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(4).label("Password"),
 });
 
+const users = getUsers();
+
 function LoginScreen() {
   const { logIn } = useAuth();
   const [loginFailed, setLoginFailed] = useState(false);
 
   const handlesubmit = async ({ email, password }) => {
-    const result = await authApi.login(email, password);
+    const user = users.find(
+      (user) => user.email === email && user.password === password
+    );
 
-    if (!result.ok) return setLoginFailed(true);
+    if (!user) return setLoginFailed(true);
     setLoginFailed(false);
-    logIn(result.data);
+    logIn(user);
   };
 
   return (

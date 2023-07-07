@@ -6,15 +6,14 @@ import jwtDecode from "jwt-decode";
 export default useAuth = () => {
   const { user, setUser } = useContext(AuthContext);
 
-  const logIn = (authToken) => {
-    const user = jwtDecode(authToken);
+  const logIn = (user) => {
     setUser(user);
-    authStorage.storeToken(authToken);
+    authStorage.storeUser(user);
   };
 
   const logOut = () => {
     setUser(null);
-    authStorage.removeToken();
+    authStorage.removeUser();
   };
   return { user, logOut, logIn, setUser };
 };

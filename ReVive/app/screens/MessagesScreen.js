@@ -9,16 +9,15 @@ import Screen from "../components/Screen";
 const initialMessages = [
   {
     id: 1,
-    title: "T1",
-    description: "D1",
-    image: require("../assets/mosh.jpg"),
+    title: "Shivam",
+    description: "Hello, this a project app.",
+    image: require("../assets/users/guy.jpg"),
   },
   {
     id: 2,
-    title: "T2",
-    description:
-      "D2kdkdhskfhkshkjfhksdjhfkhfdjkhfsjdh dshkfdhkdfhfhkdjshfkhsdkjhkfhksjhdfk",
-    image: require("../assets/mosh.jpg"),
+    title: "John",
+    description: "Hello",
+    image: require("../assets/users/John.jpg"),
   },
 ];
 
@@ -55,7 +54,7 @@ function MessagesScreen(props) {
               id: 2,
               title: "T2",
               description: "D2",
-              image: require("../assets/mosh.jpg"),
+              image: require("../assets/users/John.jpg"),
             },
           ]);
         }}

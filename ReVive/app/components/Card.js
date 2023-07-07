@@ -1,19 +1,38 @@
-import React from "react";
-import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import colors from "../config/colors";
 import AppText from "./AppText";
-import { Image } from "react-native-expo-image-cache";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-function Card({ title, subTitle, imageUrl, onPress, thumbnailUrl }) {
+function Card({ item, title, subTitle, onPress, imageUrl }) {
+  const [isFavorite, setIsFavorite] = useState(item.favourite);
+
+  item.favourite = isFavorite;
+
+  const handleFavoritePress = () => {
+    setIsFavorite(!isFavorite);
+  };
+
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.card}>
-        <Image
-          style={styles.image}
-          uri={imageUrl}
-          tint="light"
-          preview={{ uri: thumbnailUrl }}
-        />
+        <Image style={styles.image} source={imageUrl} />
+        <TouchableOpacity
+          style={styles.favoriteButton}
+          onPress={handleFavoritePress}
+        >
+          <MaterialCommunityIcons
+            name={isFavorite ? "heart" : "heart-outline"}
+            size={28}
+            color={isFavorite ? colors.secondary : colors.medium}
+          />
+        </TouchableOpacity>
         <View style={styles.detailsContainer}>
           <AppText style={styles.title} numberOfLines={1}>
             {title}
@@ -48,5 +67,12 @@ const styles = StyleSheet.create({
     color: colors.secondary,
     fontWeight: "bold",
   },
+  favoriteButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    zIndex: 1,
+  },
 });
+
 export default Card;

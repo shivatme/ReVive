@@ -1,45 +1,36 @@
 import React, { useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import * as Device from "expo-device";
-import * as Notifications from "expo-notifications";
-
-import expoPushTokensApi from "../api/expoPushTokens";
+import { Ionicons } from "@expo/vector-icons";
 import AccountNavigator from "./AccountNavigator";
 import FeedNavigator from "./FeedNavigator";
 import ListingEditScreen from "../screens/ListingEditScreen";
 import NewListingButton from "./NewListingButton";
 import routes from "./routes";
+import MessagesScreen from "../screens/MessagesScreen";
+import FavouritesScreen from "../screens/FavouritesScreen";
 
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => {
-  useEffect(() => {
-    registerForPushNotifications();
-  }, []);
-
-  const registerForPushNotifications = async () => {
-    try {
-      const permission = await Notifications.requestPermissionsAsync();
-      if (!permission.status) return;
-
-      const token = await Notifications.getExpoPushTokenAsync({
-        projectId: "your-project-id",
-      });
-      expoPushTokensApi.register(token);
-    } catch (error) {
-      console.log("Error getting push token", error);
-    }
-  };
-
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Feed"
+        name="Home"
         component={FeedNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Chats"
+        component={MessagesScreen}
+        options={{
+          tabBarBadge: 2,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="chatbubble-sharp" color={color} size={size} />
           ),
         }}
       />
@@ -60,6 +51,15 @@ const AppNavigator = () => {
             />
           ),
         })}
+      />
+      <Tab.Screen
+        name="My Ads"
+        component={FavouritesScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="ios-heart" color={color} size={size} />
+          ),
+        }}
       />
       <Tab.Screen
         name="Account"
