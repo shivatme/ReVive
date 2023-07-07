@@ -9,6 +9,13 @@ function ListingDetailsScreen({ route }) {
   const listing = route.params;
   const [isFavorite, setIsFavorite] = useState(listing.favourite);
   listing.favourite = isFavorite;
+  let imageSource;
+
+  if (typeof listing.images[0].location === "string") {
+    imageSource = { uri: listing.images[0].location };
+  } else {
+    imageSource = listing.images[0].location;
+  }
 
   const handleFavoritePress = () => {
     setIsFavorite(!isFavorite);
@@ -16,7 +23,7 @@ function ListingDetailsScreen({ route }) {
 
   return (
     <View>
-      <Image style={styles.image} source={listing.images[0].location} />
+      <Image style={styles.image} source={imageSource} />
       <View style={styles.detailsContainer}>
         <AppText style={styles.title}>{listing.title}</AppText>
         <AppText style={styles.price}>${listing.price}</AppText>

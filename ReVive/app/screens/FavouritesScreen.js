@@ -14,7 +14,6 @@ import AppText from "../components/AppText";
 function FavouritesScreen({ navigation }) {
   const loading = false;
   const listings = filterListings((listing) => listing.favourite);
-  console.log(listings.length);
   const isFocused = useIsFocused();
 
   return (

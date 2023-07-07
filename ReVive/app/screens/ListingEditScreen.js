@@ -35,15 +35,25 @@ function ListingEditScreen(props) {
     setProgress(0);
     setVisibleUpload(true);
     simulateProgressBar();
-    addListing({ ...listing, location });
 
+    const { images, ...rest } = listing; // Destructure 'images' from 'listing'
+
+    const updatedListing = {
+      ...rest, // Spread the remaining properties of 'listing'
+      images: [{ location: images[0] }], // Assign 'images[0]' to 'images[0].location'
+      location: location,
+    };
+    console.log(updatedListing);
+
+    addListing(updatedListing);
+    console.log(updatedListing);
     function simulateProgressBar() {
       let progressBar = 0;
       const interval = setInterval(() => {
-        progressBar++;
+        progressBar += 5;
         setProgress(progressBar / 100);
 
-        if (progressBar === 100) {
+        if (progressBar >= 100) {
           clearInterval(interval);
           resetForm();
         }
@@ -100,6 +110,7 @@ function ListingEditScreen(props) {
 }
 const styles = StyleSheet.create({
   container: {
+    top: 20,
     padding: 20,
   },
 });
