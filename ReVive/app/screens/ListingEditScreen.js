@@ -14,11 +14,12 @@ import FormImagePicker from "../components/forms/FormImagePicker";
 import useLocation from "../hooks/useLocation";
 import UploadScreen from "./UploadScreen";
 import { getCategories } from "../store/categories";
-import { addListing } from "../store/listings";
+import dbManager from "../firebase/database";
+import storageManager from "../firebase/imageStorage";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().min(1).label("Title"),
-  price: Yup.number().required().min(1).max(10000).label("Price"),
+  price: Yup.number().required().min(1).max(1000000).label("Price"),
   description: Yup.string().label("Description"),
   category: Yup.object().required().label("Category"),
   images: Yup.array().min(1, "Please select at least one image"),
@@ -34,31 +35,21 @@ function ListingEditScreen(props) {
   const handleSubmit = async (listing, { resetForm }) => {
     setProgress(0);
     setVisibleUpload(true);
-    simulateProgressBar();
-
-    const { images, ...rest } = listing; // Destructure 'images' from 'listing'
-
-    const updatedListing = {
-      ...rest, // Spread the remaining properties of 'listing'
-      images: [{ location: images[0] }], // Assign 'images[0]' to 'images[0].location'
-      location: location,
-    };
-    console.log(updatedListing);
-
-    addListing(updatedListing);
-    console.log(updatedListing);
-    function simulateProgressBar() {
-      let progressBar = 0;
-      const interval = setInterval(() => {
-        progressBar += 5;
-        setProgress(progressBar / 100);
-
-        if (progressBar >= 100) {
-          clearInterval(interval);
-          resetForm();
-        }
-      }, 3);
-    }
+    await storageManager.uploadImages(listing.images).then((urls) => {
+      listing.images = urls;
+      listing.id = generateListingId();
+      dbManager.newListing(listing);
+      setProgress(1);
+      setVisibleUpload(false);
+      // resetForm();
+    });
+  };
+  const generateListingId = () => {
+    const timestamp = Date.now().toString();
+    const random = Math.floor(Math.random() * 1000)
+      .toString()
+      .padStart(3, "0");
+    return timestamp + random;
   };
 
   return (

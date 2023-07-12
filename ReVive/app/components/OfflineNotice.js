@@ -2,7 +2,6 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import AppText from "./AppText";
 import colors from "../config/colors";
-import Constants from "expo-constants";
 import { useNetInfo } from "@react-native-community/netinfo";
 
 function OfflineNotice(props) {
@@ -25,7 +24,6 @@ const styles = StyleSheet.create({
     width: "100%",
     position: "absolute",
     zIndex: 1,
-    top: Constants.statusBarHeight,
   },
 
   text: {

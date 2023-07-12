@@ -12,16 +12,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function Card({ item, title, subTitle, onPress, imageUrl }) {
   const [isFavorite, setIsFavorite] = useState(item.favourite);
-  console.log(imageUrl);
   item.favourite = isFavorite;
-  let imageSource;
-
-  if (typeof imageUrl === "string") {
-    imageSource = { uri: imageUrl };
-  } else {
-    imageSource = imageUrl;
-  }
-
   const handleFavoritePress = () => {
     setIsFavorite(!isFavorite);
   };
@@ -29,7 +20,7 @@ function Card({ item, title, subTitle, onPress, imageUrl }) {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.card}>
-        <Image style={styles.image} source={imageSource} />
+        <Image style={styles.image} source={{ uri: imageUrl }} />
         <TouchableOpacity
           style={styles.favoriteButton}
           onPress={handleFavoritePress}
@@ -55,20 +46,22 @@ function Card({ item, title, subTitle, onPress, imageUrl }) {
 
 const styles = StyleSheet.create({
   card: {
+    marginHorizontal: 10,
     borderRadius: 15,
     backgroundColor: colors.white,
-    marginBottom: 20,
+    marginBottom: 15,
     overflow: "hidden",
+    elevation: 3,
   },
   image: {
     width: "100%",
     height: 200,
   },
   detailsContainer: {
-    padding: 20,
+    padding: 10,
   },
   title: {
-    marginBottom: 7,
+    marginBottom: 3,
   },
   subTitle: {
     color: colors.secondary,

@@ -6,9 +6,10 @@ import AppNavigator from "./app/navigation/AppNavigator";
 import OfflineNotice from "./app/components/OfflineNotice";
 import AuthNavigator from "./app/navigation/AuthNavigator";
 import { useEffect, useState } from "react";
+import { StatusBar } from "react-native";
 import AuthContext from "./app/auth/context";
 import authStorage from "./app/auth/storage";
-import UploadScreen from "./app/screens/UploadScreen";
+import CategoryFilter from "./app/components/CategoryFilter";
 
 export default function App() {
   const [user, setUser] = useState();
@@ -23,11 +24,15 @@ export default function App() {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
-      <OfflineNotice />
-      <NavigationContainer theme={navigationTheme}>
-        {user ? <AppNavigator /> : <AuthNavigator />}
-      </NavigationContainer>
-    </AuthContext.Provider>
+    <>
+      <StatusBar backgroundColor="black" />
+      <AuthContext.Provider value={{ user, setUser }}>
+        <OfflineNotice />
+        <NavigationContainer theme={navigationTheme}>
+          {user ? <AppNavigator /> : <AuthNavigator />}
+        </NavigationContainer>
+      </AuthContext.Provider>
+      {/* <CategoryFilter /> */}
+    </>
   );
 }

@@ -14,6 +14,7 @@ import useAuth from "../auth/useAuth";
 import ActivityIndicator from "../components/ActivityIndicator";
 import { View } from "react-native";
 import colors from "../config/colors";
+import authManager from "../firebase/auth.js";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
@@ -26,17 +27,28 @@ function RegisterScreen() {
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
   const handlesubmit = async ({ name, email, password }) => {
-    setLoading(true);
-    const user = {
-      id: 3,
-      name,
-      email,
-      password,
-    };
-    logIn(user);
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
+    // setLoading(true);
+    // const user = {
+    //   id: 3,
+    //   name,
+    //   email,
+    //   password,
+    // };
+    // logIn(user);
+    // setTimeout(() => {
+    //   setLoading(false);
+    // }, 3000);
+    console.log(name);
+    authManager
+      .register(email, password, name)
+      .then((user) => {
+        console.log("Registration successful");
+        logIn(user);
+      })
+      .catch((err) => {
+        console.log("Registration failed", err);
+        setError(err);
+      });
   };
   return (
     <>

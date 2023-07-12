@@ -12,6 +12,7 @@ import {
 import useAuth from "../auth/useAuth";
 import colors from "../config/colors";
 import { getUsers } from "../store/users";
+import authManager from "../firebase/auth.js";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -25,13 +26,16 @@ function LoginScreen() {
   const [loginFailed, setLoginFailed] = useState(false);
 
   const handlesubmit = async ({ email, password }) => {
-    const user = users.find(
-      (user) => user.email === email && user.password === password
-    );
-
-    if (!user) return setLoginFailed(true);
-    setLoginFailed(false);
-    logIn(user);
+    authManager
+      .login(email, password)
+      .then((user) => {
+        console.log("Login successful");
+        logIn(user);
+      })
+      .catch((err) => {
+        console.log("Login failed", err);
+        setLoginFailed(true);
+      });
   };
 
   return (

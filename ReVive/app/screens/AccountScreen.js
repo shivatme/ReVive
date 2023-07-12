@@ -37,7 +37,7 @@ function AccountScreen({ navigation }) {
           // title={user.name}
           // subTitle={user.email}
           title="Shiva"
-          subTitle="St@gmail.com"
+          subTitle={user.email}
           image={require("../assets/users/account.png")}
         />
       </View>

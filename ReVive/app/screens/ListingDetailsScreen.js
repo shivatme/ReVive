@@ -4,48 +4,44 @@ import AppText from "../components/AppText";
 import colors from "../config/colors";
 import ListItem from "../components/lists/ListItem";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import ImageSlider from "../components/ImageSlider";
 
 function ListingDetailsScreen({ route }) {
   const listing = route.params;
   const [isFavorite, setIsFavorite] = useState(listing.favourite);
   listing.favourite = isFavorite;
-  let imageSource;
-
-  if (typeof listing.images[0].location === "string") {
-    imageSource = { uri: listing.images[0].location };
-  } else {
-    imageSource = listing.images[0].location;
-  }
-
   const handleFavoritePress = () => {
     setIsFavorite(!isFavorite);
   };
 
   return (
-    <View>
-      <Image style={styles.image} source={imageSource} />
-      <View style={styles.detailsContainer}>
-        <AppText style={styles.title}>{listing.title}</AppText>
-        <AppText style={styles.price}>${listing.price}</AppText>
-        <TouchableOpacity
-          style={styles.favoriteButton}
-          onPress={handleFavoritePress}
-        >
-          <MaterialCommunityIcons
-            name={isFavorite ? "heart" : "heart-outline"}
-            size={28}
-            color={isFavorite ? colors.secondary : colors.medium}
-          />
-        </TouchableOpacity>
-        <View style={styles.userContainer}>
-          <ListItem
-            image={require("../assets/users/John.jpg")}
-            title="John"
-            subTitle="John@domain.com"
-          />
+    <>
+      <View>
+        {/* <Image style={styles.image} source={{ uri: listing.images[0] }} /> */}
+        <ImageSlider style={styles.image} images={listing.images} />
+        <View style={styles.detailsContainer}>
+          <AppText style={styles.title}>{listing.title}</AppText>
+          <AppText style={styles.price}>${listing.price}</AppText>
+          <TouchableOpacity
+            style={styles.favoriteButton}
+            onPress={handleFavoritePress}
+          >
+            <MaterialCommunityIcons
+              name={isFavorite ? "heart" : "heart-outline"}
+              size={28}
+              color={isFavorite ? colors.secondary : colors.medium}
+            />
+          </TouchableOpacity>
+          <View style={styles.userContainer}>
+            <ListItem
+              image={require("../assets/users/John.jpg")}
+              title="John"
+              subTitle="John@domain.com"
+            />
+          </View>
         </View>
       </View>
-    </View>
+    </>
   );
 }
 const styles = StyleSheet.create({
