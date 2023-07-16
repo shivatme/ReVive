@@ -16,6 +16,7 @@ const menuItems = [
       name: "format-list-bulleted",
       backgroundColor: colors.primary,
     },
+    targetScreen: routes.MYLISTINGS,
   },
   {
     title: "My Messages",
@@ -34,11 +35,10 @@ function AccountScreen({ navigation }) {
     <Screen style={styles.screen}>
       <View style={styles.container}>
         <ListItem
-          // title={user.name}
-          // subTitle={user.email}
-          title="Shiva"
+          title={user.displayName}
           subTitle={user.email}
           image={require("../assets/users/account.png")}
+          onPress={() => navigation.navigate(routes.EDIT_ACCOUNT_DETAILS)}
         />
       </View>
       <View style={styles.container}>

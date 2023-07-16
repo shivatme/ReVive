@@ -17,7 +17,6 @@ function ListingDetailsScreen({ route }) {
   return (
     <>
       <View>
-        {/* <Image style={styles.image} source={{ uri: listing.images[0] }} /> */}
         <ImageSlider style={styles.image} images={listing.images} />
         <View style={styles.detailsContainer}>
           <AppText style={styles.title}>{listing.title}</AppText>

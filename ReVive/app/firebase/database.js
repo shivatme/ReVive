@@ -9,6 +9,7 @@ const newListing = (listing) => {
     price: listing.price,
     description: listing.description,
     images: listing.images,
+    favorite: false,
   })
     .then(() => {
       console.log("successfully listed");

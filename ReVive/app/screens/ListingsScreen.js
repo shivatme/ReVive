@@ -51,10 +51,16 @@ function ListingsScreen({ navigation }) {
       <ActivityIndicator visible={loading} />
 
       <Screen style={styles.screen}>
-        <AppText style={styles.sectionHeader}>CATEGORIES</AppText>
         {isFocused && (
           <FlatList
-            ListHeaderComponent={<CategoryFilter categories={categories} />}
+            ListHeaderComponent={
+              <>
+                <AppText style={styles.sectionHeader}>
+                  RECOMMENDED ITEMS
+                </AppText>
+                {/* <CategoryFilter categories={categories} /> */}
+              </>
+            }
             data={listingsArray}
             keyExtractor={(listing) => listing.id.toString()}
             renderItem={({ item }) => (

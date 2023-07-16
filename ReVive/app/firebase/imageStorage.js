@@ -19,7 +19,7 @@ const uploadImages = async (imageUris) => {
       // Get the download URL of the uploaded image
       const downloadURL = await getDownloadURL(storageRef);
 
-      console.log("Image uploaded successfully. Download URL:", downloadURL);
+      // console.log("Image uploaded successfully. Download URL:", downloadURL);
 
       downloadURLs.push(downloadURL);
     }

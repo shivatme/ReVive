@@ -5,12 +5,15 @@ import ListItem from "../components/lists/ListItem";
 import ListItemDeleteAction from "../components/lists/ListItemDeleteAction";
 import ListItemSeparator from "../components/lists/ListItemSeparator";
 import Screen from "../components/Screen";
+import { useDispatch, useSelector } from "react-redux";
+import { Button } from "react-native";
+import AppText from "../components/AppText";
 
 const initialMessages = [
   {
     id: 1,
-    title: "Shivam",
-    description: "Hello, this a project app.",
+    title: "Shivam Tiwari",
+    description: "Hi, this is my project app.",
     image: require("../assets/users/guy.jpg"),
   },
   {
@@ -22,6 +25,14 @@ const initialMessages = [
 ];
 
 function MessagesScreen(props) {
+  const dispatch = useDispatch();
+  const addbtn = () => {
+    dispatch({
+      type: "increment",
+    });
+  };
+
+  // const { c } = useSelector((state) => state.custom);
   const [messages, setMessages] = useState(initialMessages);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -51,14 +62,16 @@ function MessagesScreen(props) {
         onRefresh={() => {
           setMessages([
             {
-              id: 2,
-              title: "T2",
-              description: "D2",
-              image: require("../assets/users/John.jpg"),
+              id: 1,
+              title: "Shivam Tiwari",
+              description: "Hi, this is my project app.",
+              image: require("../assets/users/guy.jpg"),
             },
           ]);
         }}
       />
+      {/* <AppText>{c}</AppText>
+      <Button onPress={addbtn} title="add" /> */}
     </Screen>
   );
 }

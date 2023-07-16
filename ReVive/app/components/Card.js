@@ -11,7 +11,8 @@ import AppText from "./AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function Card({ item, title, subTitle, onPress, imageUrl }) {
-  const [isFavorite, setIsFavorite] = useState(item.favourite);
+  // console.log(item);
+  const [isFavorite, setIsFavorite] = useState(item.favorite);
   item.favourite = isFavorite;
   const handleFavoritePress = () => {
     setIsFavorite(!isFavorite);

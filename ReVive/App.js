@@ -10,6 +10,8 @@ import { StatusBar } from "react-native";
 import AuthContext from "./app/auth/context";
 import authStorage from "./app/auth/storage";
 import CategoryFilter from "./app/components/CategoryFilter";
+import { Provider } from "react-redux";
+import store from "./app/Redux/store";
 
 export default function App() {
   const [user, setUser] = useState();
@@ -26,13 +28,14 @@ export default function App() {
   return (
     <>
       <StatusBar backgroundColor="black" />
-      <AuthContext.Provider value={{ user, setUser }}>
-        <OfflineNotice />
-        <NavigationContainer theme={navigationTheme}>
-          {user ? <AppNavigator /> : <AuthNavigator />}
-        </NavigationContainer>
-      </AuthContext.Provider>
-      {/* <CategoryFilter /> */}
+      <Provider store={store}>
+        <AuthContext.Provider value={{ user, setUser }}>
+          <OfflineNotice />
+          <NavigationContainer theme={navigationTheme}>
+            {user ? <AppNavigator /> : <AuthNavigator />}
+          </NavigationContainer>
+        </AuthContext.Provider>
+      </Provider>
     </>
   );
 }
