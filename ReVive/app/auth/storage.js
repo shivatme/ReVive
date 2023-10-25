@@ -1,29 +1,36 @@
-import * as SecureStore from "expo-secure-store";
+import * as Keychain from 'react-native-keychain';
 
-const key = "user";
+const key = 'user';
 
-const storeUser = async (user) => {
+const storeUser = async user => {
   try {
-    await SecureStore.setItemAsync(key, JSON.stringify(user));
+    const password = '123351';
+    const username = JSON.stringify(user);
+    await Keychain.setGenericPassword(username, password);
+    console.log('saved success');
   } catch (error) {
-    console.log("Error storing the auth token", error);
+    console.log('Error storing the user:', error);
   }
 };
 
 const getUser = async () => {
   try {
-    const user = await SecureStore.getItemAsync(key);
-    return JSON.parse(user);
+    const credentials = await Keychain.getGenericPassword();
+    if (credentials) {
+      return JSON.parse(credentials.username);
+    } else {
+      return null;
+    }
   } catch (error) {
-    console.log("Error getting the auth token.", error);
+    console.log('Error getting the user:', error);
   }
 };
 
 const removeUser = async () => {
   try {
-    await SecureStore.deleteItemAsync(key);
+    await Keychain.resetGenericPassword(key);
   } catch (error) {
-    console.log("Error removing the token", error);
+    console.log('Error removing the user:', error);
   }
 };
 

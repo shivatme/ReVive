@@ -1,9 +1,9 @@
-import React from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
-import colors from "../config/colors";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import React from 'react';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import colors from '../config/colors';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-function NewListingButton({ onPress }) {
+function NewListingButton({onPress}) {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.container}>
@@ -19,8 +19,8 @@ function NewListingButton({ onPress }) {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: colors.primary,
     borderRadius: 40,
     borderColor: colors.white,

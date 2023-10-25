@@ -1,34 +1,53 @@
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import firebaseApp from "../config/firebaseConfig";
+import {getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage';
+import firebaseApp from '../config/firebaseConfig';
+import RNFS from 'react-native-fs';
 
 const storage = getStorage(firebaseApp);
 
-const uploadImages = async (imageUris) => {
+const uriToBlob = uri => {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      resolve(xhr.response);
+    };
+
+    xhr.onerror = function () {
+      reject(new Error('uriToBlob failed'));
+    };
+    xhr.responseType = 'blob';
+    xhr.open('GET', uri, true);
+    xhr.send(null);
+  });
+};
+
+const uploadImages = async imageUris => {
   try {
-    console.log(imageUris);
     const downloadURLs = [];
+
     for (const uri of imageUris) {
-      const response = await fetch(uri);
-      const blob = await response.blob();
-      const imageName = uri.substring(uri.lastIndexOf("/") + 1);
-      const storageRef = ref(storage, "images/" + imageName);
+      const blobData = await uriToBlob(uri);
 
-      // Upload the image file to Firebase Storage
-      await uploadBytes(storageRef, blob);
+      const imageName = uri.substring(uri.lastIndexOf('/') + 1);
+      const storageRef = ref(storage, 'images/' + imageName);
 
-      // Get the download URL of the uploaded image
+      // Determine the content type based on the file extension or use a default type
+      let contentType = 'image/jpeg'; // Replace with the appropriate MIME type based on your image format
+
+      // Set the content type in the metadata
+      const metadata = {
+        contentType: contentType,
+      };
+
+      await uploadBytes(storageRef, blobData, metadata);
       const downloadURL = await getDownloadURL(storageRef);
-
-      // console.log("Image uploaded successfully. Download URL:", downloadURL);
-
       downloadURLs.push(downloadURL);
     }
 
     return downloadURLs;
   } catch (error) {
-    console.error("Error uploading images:", error);
+    console.error('Error uploading images:', error);
     throw error;
   }
 };
 
-export default { uploadImages };
+export default {uploadImages};

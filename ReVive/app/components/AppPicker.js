@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from 'react';
 import {
   Button,
   FlatList,
@@ -6,12 +6,12 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   View,
-} from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import defaultStyles from "../config/styles";
-import AppText from "./AppText";
-import Screen from "./Screen";
-import PickerItem from "./PickerItem";
+} from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import defaultStyles from '../config/styles';
+import AppText from './AppText';
+import Screen from './Screen';
+import PickerItem from './PickerItem';
 
 function AppPicker({
   icon,
@@ -21,14 +21,14 @@ function AppPicker({
   PickerItemComponent = PickerItem,
   placeholder,
   selectedItem,
-  width = "100%",
+  width = '100%',
 }) {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <>
       <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
-        <View style={[styles.container, { width }]}>
+        <View style={[styles.container, {width}]}>
           {icon && (
             <MaterialCommunityIcons
               name={icon}
@@ -55,9 +55,9 @@ function AppPicker({
           <Button title="Close" onPress={() => setModalVisible(false)} />
           <FlatList
             data={items}
-            keyExtractor={(item) => item.value.toString()}
+            keyExtractor={item => item.value.toString()}
             numColumns={numOfColumns}
-            renderItem={({ item }) => (
+            renderItem={({item}) => (
               <PickerItemComponent
                 item={item}
                 onPress={() => {
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: defaultStyles.colors.light,
     borderRadius: 25,
-    flexDirection: "row",
+    flexDirection: 'row',
     padding: 15,
     marginVertical: 10,
   },

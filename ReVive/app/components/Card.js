@@ -1,33 +1,48 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   TouchableWithoutFeedback,
   View,
   Image,
   TouchableOpacity,
-} from "react-native";
-import colors from "../config/colors";
-import AppText from "./AppText";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+} from 'react-native';
+import colors from '../config/colors';
+import AppText from './AppText';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useSelector, useDispatch} from 'react-redux';
+import {selectListingById} from '../redux/listingSlice';
+import {updateListing} from '../redux/listingSlice';
 
-function Card({ item, title, subTitle, onPress, imageUrl }) {
-  // console.log(item);
-  const [isFavorite, setIsFavorite] = useState(item.favorite);
-  item.favourite = isFavorite;
-  const handleFavoritePress = () => {
-    setIsFavorite(!isFavorite);
-  };
+function Card({item, title, subTitle, onPress, imageUrl}) {
+  const dispatch = useDispatch();
+  const listing = useSelector(state => selectListingById(state, item.id));
+
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  useEffect(() => {
+    if (listing && isInitialLoad) {
+      setIsFavorite(listing.favorite);
+      setIsInitialLoad(false);
+    }
+  }, [listing, isInitialLoad]);
+
+  useEffect(() => {
+    if (!isInitialLoad && listing) {
+      const listingId = listing.id;
+      dispatch(updateListing({id: listingId, favorite: isFavorite}));
+    }
+  }, [isFavorite, isInitialLoad, listing]);
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.card}>
-        <Image style={styles.image} source={{ uri: imageUrl }} />
+        <Image style={styles.image} source={{uri: imageUrl}} />
         <TouchableOpacity
           style={styles.favoriteButton}
-          onPress={handleFavoritePress}
-        >
+          onPress={() => setIsFavorite(!isFavorite)}>
           <MaterialCommunityIcons
-            name={isFavorite ? "heart" : "heart-outline"}
+            name={isFavorite ? 'heart' : 'heart-outline'}
             size={28}
             color={isFavorite ? colors.secondary : colors.medium}
           />
@@ -51,11 +66,11 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: colors.white,
     marginBottom: 15,
-    overflow: "hidden",
+    overflow: 'hidden',
     elevation: 3,
   },
   image: {
-    width: "100%",
+    width: '100%',
     height: 200,
   },
   detailsContainer: {
@@ -66,10 +81,10 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     color: colors.secondary,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   favoriteButton: {
-    position: "absolute",
+    position: 'absolute',
     top: 10,
     right: 10,
     zIndex: 1,

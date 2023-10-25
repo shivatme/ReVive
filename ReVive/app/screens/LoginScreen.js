@@ -1,51 +1,52 @@
-import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
-import * as Yup from "yup";
+import React, {useState} from 'react';
+import {StyleSheet, View} from 'react-native';
+import * as Yup from 'yup';
 
-import Screen from "../components/Screen";
+import Screen from '../components/Screen';
 import {
   ErrorMessage,
   AppForm,
   AppFormField,
   SubmitButton,
-} from "../components/forms";
-import useAuth from "../auth/useAuth";
-import colors from "../config/colors";
-import { getUsers } from "../store/users";
-import authManager from "../firebase/auth.js";
+} from '../components/forms';
+import AppText from '../components/AppText';
+import useAuth from '../auth/useAuth';
+
+import colors from '../config/colors';
+// import {getUsers} from '../store/users';
+import authManager from '../firebase/auth.js';
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().required().email().label("Email"),
-  password: Yup.string().required().min(4).label("Password"),
+  email: Yup.string().required().email().label('Email'),
+  password: Yup.string().required().min(4).label('Password'),
 });
 
-const users = getUsers();
+// const users = getUsers();
 
-function LoginScreen() {
-  const { logIn } = useAuth();
+function LoginScreen(props) {
+  const {logIn} = useAuth();
   const [loginFailed, setLoginFailed] = useState(false);
 
-  const handlesubmit = async ({ email, password }) => {
+  const handlesubmit = async ({email, password}) => {
+    console.log(email);
     authManager
       .login(email, password)
-      .then((user) => {
-        console.log("Login successful");
+      .then(user => {
+        console.log('Login successful');
         logIn(user);
       })
-      .catch((err) => {
-        console.log("Login failed", err);
+      .catch(err => {
+        console.log('Login failed', err);
         setLoginFailed(true);
       });
   };
-
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
         <AppForm
-          initialValues={{ email: "", password: "" }}
+          initialValues={{email: '', password: ''}}
           onSubmit={handlesubmit}
-          validationSchema={validationSchema}
-        >
+          validationSchema={validationSchema}>
           <ErrorMessage
             error="Invalid email and/or password"
             visible={loginFailed}
@@ -59,7 +60,6 @@ function LoginScreen() {
             placeholder="Email"
             textContentType="emailAddress"
           />
-
           <AppFormField
             autoCapitalize="none"
             autoCorrect={false}
@@ -76,6 +76,7 @@ function LoginScreen() {
     </Screen>
   );
 }
+
 const styles = StyleSheet.create({
   screen: {
     backgroundColor: colors.green,
@@ -85,4 +86,5 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
+
 export default LoginScreen;

@@ -1,36 +1,4 @@
 {
-  "expo": {
-    "name": "ReVive",
-    "slug": "ReVive",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./app/assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./app/assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./app/assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "package": "com.shivam2827.ReVive"
-    },
-    "web": {
-      "favicon": "./assets/icon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "4b7ff260-d59d-4a93-9e2c-7bb0992b58bf"
-      }
-    }
-  }
+  "name": "ReVive",
+  "displayName": "ReVive"
 }

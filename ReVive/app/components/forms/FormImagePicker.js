@@ -1,20 +1,20 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
-import ImageInputList from "../ImageInputList";
-import ErrorMessage from "./ErrorMessage";
-import { useFormikContext } from "formik";
+import React from 'react';
+import {View, StyleSheet} from 'react-native';
+import ImageInputList from '../ImageInputList';
+import ErrorMessage from './ErrorMessage';
+import {useFormikContext} from 'formik';
 
-function FormImagePicker({ name }) {
-  const { errors, setFieldValue, touched, values } = useFormikContext();
+function FormImagePicker({name}) {
+  const {errors, setFieldValue, touched, values} = useFormikContext();
   const imageUris = values[name];
 
-  const handleAdd = (uri) => {
+  const handleAdd = uri => {
     setFieldValue(name, [...imageUris, uri]);
   };
-  const handleRemove = (uri) => {
+  const handleRemove = uri => {
     setFieldValue(
       name,
-      imageUris.filter((imageUri) => imageUri !== uri)
+      imageUris.filter(imageUri => imageUri !== uri),
     );
   };
 

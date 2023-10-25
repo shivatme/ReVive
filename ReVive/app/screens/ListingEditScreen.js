@@ -1,54 +1,57 @@
-import React, { useState } from "react";
-import { StyleSheet } from "react-native";
-import * as Yup from "yup";
+import React, {useState} from 'react';
+import {StyleSheet} from 'react-native';
+import * as Yup from 'yup';
 
 import {
   AppForm,
   AppFormField,
   AppFormPicker,
   SubmitButton,
-} from "../components/forms";
-import CategoryPickerItem from "../components/CategoryPickerItem";
-import Screen from "../components/Screen";
-import FormImagePicker from "../components/forms/FormImagePicker";
-import useLocation from "../hooks/useLocation";
-import UploadScreen from "./UploadScreen";
-import { getCategories } from "../store/categories";
-import dbManager from "../firebase/database";
-import storageManager from "../firebase/imageStorage";
+} from '../components/forms';
+import CategoryPickerItem from '../components/CategoryPickerItem';
+import Screen from '../components/Screen';
+import FormImagePicker from '../components/forms/FormImagePicker';
+// import useLocation from "../hooks/useLocation";
+import UploadScreen from './UploadScreen';
+import {getCategories} from '../store/categories';
+import dbManager from '../firebase/database';
+import storageManager from '../firebase/imageStorage';
 
 const validationSchema = Yup.object().shape({
-  title: Yup.string().required().min(1).label("Title"),
-  price: Yup.number().required().min(1).max(1000000).label("Price"),
-  description: Yup.string().label("Description"),
-  category: Yup.object().required().label("Category"),
-  images: Yup.array().min(1, "Please select at least one image"),
+  title: Yup.string().required().min(1).label('Title'),
+  price: Yup.number().required().min(1).max(1000000).label('Price'),
+  description: Yup.string().label('Description'),
+  category: Yup.object().required().label('Category'),
+  images: Yup.array().min(1, 'Please select at least one image'),
 });
 
 const categories = getCategories();
 
 function ListingEditScreen(props) {
-  const location = useLocation();
+  // const location = useLocation();
   const [visibleUpload, setVisibleUpload] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  const handleSubmit = async (listing, { resetForm }) => {
+  const handleSubmit = async (listing, {resetForm}) => {
     setProgress(0);
     setVisibleUpload(true);
-    await storageManager.uploadImages(listing.images).then((urls) => {
+    await storageManager.uploadImages(listing.images).then(urls => {
+      setProgress(0.3);
       listing.images = urls;
       listing.id = generateListingId();
+      setProgress(0.5);
       dbManager.newListing(listing);
       setProgress(1);
       setVisibleUpload(false);
-      // resetForm();
+      resetForm();
     });
   };
+
   const generateListingId = () => {
     const timestamp = Date.now().toString();
     const random = Math.floor(Math.random() * 1000)
       .toString()
-      .padStart(3, "0");
+      .padStart(3, '0');
     return timestamp + random;
   };
 
@@ -61,15 +64,14 @@ function ListingEditScreen(props) {
       />
       <AppForm
         initialValues={{
-          title: "",
-          price: "",
-          description: "",
+          title: '',
+          price: '',
+          description: '',
           category: null,
           images: [],
         }}
         onSubmit={handleSubmit}
-        validationSchema={validationSchema}
-      >
+        validationSchema={validationSchema}>
         <FormImagePicker name="images" />
         <AppFormField maxLength={255} name="title" placeholder="Title" />
         <AppFormField

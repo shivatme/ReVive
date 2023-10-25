@@ -1,35 +1,40 @@
-import React from "react";
-import { StyleSheet, View, FlatList } from "react-native";
+import React from 'react';
+import {StyleSheet, View, FlatList} from 'react-native';
 
-import colors from "../config/colors";
-import Icon from "../components/Icon";
-import ListItem from "../components/lists/ListItem";
-import ListItemSeparator from "../components/lists/ListItemSeparator";
-import routes from "../navigation/routes";
-import Screen from "../components/Screen";
-import useAuth from "../auth/useAuth";
+import colors from '../config/colors';
+import Icon from '../components/Icon';
+import ListItem from '../components/lists/ListItem';
+import ListItemSeparator from '../components/lists/ListItemSeparator';
+import routes from '../navigation/routes';
+import Screen from '../components/Screen';
+import useAuth from '../auth/useAuth';
+import authStorage from '../auth/storage';
 
 const menuItems = [
   {
-    title: "My Listings",
+    title: 'My Listings',
     icon: {
-      name: "format-list-bulleted",
+      name: 'format-list-bulleted',
       backgroundColor: colors.primary,
     },
     targetScreen: routes.MYLISTINGS,
   },
   {
-    title: "My Messages",
+    title: 'My Messages',
     icon: {
-      name: "email",
+      name: 'email',
       backgroundColor: colors.secondary,
     },
     targetScreen: routes.MESSAGES,
   },
 ];
 
-function AccountScreen({ navigation }) {
-  const { user, logOut } = useAuth();
+function AccountScreen({navigation}) {
+  const {user, logOut} = useAuth();
+  const restoreUser = async () => {
+    const use = await authStorage.getUser();
+  };
+  restoreUser();
 
   return (
     <Screen style={styles.screen}>
@@ -37,16 +42,16 @@ function AccountScreen({ navigation }) {
         <ListItem
           title={user.displayName}
           subTitle={user.email}
-          image={require("../assets/users/account.png")}
+          image={require('../assets/users/account.png')}
           onPress={() => navigation.navigate(routes.EDIT_ACCOUNT_DETAILS)}
         />
       </View>
       <View style={styles.container}>
         <FlatList
           data={menuItems}
-          keyExtractor={(menuItem) => menuItem.title}
+          keyExtractor={menuItem => menuItem.title}
           ItemSeparatorComponent={ListItemSeparator}
-          renderItem={({ item }) => (
+          renderItem={({item}) => (
             <ListItem
               title={item.title}
               IconComponent={
