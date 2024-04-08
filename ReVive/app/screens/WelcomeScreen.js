@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     top: 70,
   },
   tagLine: {
-    top: 370,
+    top: 350,
     fontSize: 20,
     fontWeight: '300',
     paddingVertical: 20,
