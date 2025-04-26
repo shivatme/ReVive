@@ -19,6 +19,9 @@ import {
   RouteProp,
 } from '@react-navigation/native';
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
+import MessagesScreen from '../screens/MessagesScreen';
+import FavouritesScreen from '../screens/FavouritesScreeb';
+import AccountNavigator from './AccountNavigator';
 
 // Define your tab navigator type
 type RootTabParamList = {
@@ -50,17 +53,17 @@ const AppNavigator = () => {
           ),
         }}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Chats"
         component={MessagesScreen}
         options={{
           tabBarBadge: 2,
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({color, size}) => (
             <Ionicons name="chatbubble-sharp" color={color} size={size} />
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="ListingEdit"
         component={ListingEditScreen}
         options={({ navigation }) => ({
@@ -77,12 +80,12 @@ const AppNavigator = () => {
             />
           ),
         })}
-      />
+      /> */}
       <Tab.Screen
         name="My Ads"
         component={FavouritesScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({color, size}) => (
             <Ionicons name="heart-sharp" color={color} size={size} />
           ),
         }}
@@ -91,24 +94,14 @@ const AppNavigator = () => {
         name="Account"
         component={AccountNavigator}
         options={{
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({color, size}) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />
           ),
         }}
-      /> */}
+      />
     </Tab.Navigator>
   );
 };
-
-function showTabBar(
-  route: RouteProp<RootTabParamList, keyof RootTabParamList>,
-): ViewStyle {
-  const routeName = getFocusedRouteNameFromRoute(route);
-  const stackRoutes = ['Home', 'Chats', 'ListingEdit', 'My Ads'];
-  return {
-    display: routeName && stackRoutes.includes(routeName) ? 'flex' : 'none',
-  };
-}
 
 const styles = StyleSheet.create({
   tabBarContainer: {
