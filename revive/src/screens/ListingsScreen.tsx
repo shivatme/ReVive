@@ -1,13 +1,13 @@
-import {NavigationProp, useIsFocused} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, FlatList} from 'react-native';
-import db from '../db/db';
-import ActivityIndicator from '../components/ActivityIndicator';
-import AppText from '../components/AppText';
-import colors from '../config/colors';
-import Screen from '../components/Screen';
-import Card from '../components/Card';
-import routes from '../navigation/routes';
+import { NavigationProp, useIsFocused } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, FlatList } from "react-native";
+import db from "../firebase/database";
+import ActivityIndicator from "../components/ActivityIndicator";
+import AppText from "../components/AppText";
+import colors from "../config/colors";
+import Screen from "../components/Screen";
+import Card from "../components/Card";
+import routes from "../navigation/routes";
 
 interface ListingsScreenProps {
   navigation: NavigationProp<any>;
@@ -21,7 +21,9 @@ interface Listing {
   favorite: boolean;
 }
 
-function ListingsScreen({navigation}: ListingsScreenProps): React.JSX.Element {
+function ListingsScreen({
+  navigation,
+}: ListingsScreenProps): React.JSX.Element {
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -29,16 +31,29 @@ function ListingsScreen({navigation}: ListingsScreenProps): React.JSX.Element {
 
   async function getAllListings(): Promise<void> {
     setRefreshing(true);
-    const listing = await db.getListings(); // assumed to be an object as you shared before
 
-    const listingsArray: Listing[] = Object.keys(listing).map(key => ({
-      id: key,
-      ...listing[key],
-    }));
+    try {
+      const listing = await db.getListings(); // assumed to be an object
 
-    setListings(listingsArray);
-    setRefreshing(false);
-    console.log(listings);
+      // If no listings are found, you can handle that scenario here
+      if (!listing) {
+        setRefreshing(false);
+        console.log("No listings available");
+        return;
+      }
+
+      const listingsArray: Listing[] = Object.keys(listing).map((key) => ({
+        id: key,
+        ...(listing[key] as Listing), // Type assertion for `listing[key]`
+      }));
+
+      setListings(listingsArray); // Assuming `setListings` is a setter for state
+      console.log(listingsArray); // Log the listingsArray instead of `listings` which is state-dependent
+    } catch (error) {
+      console.error("Error fetching listings:", error);
+    } finally {
+      setRefreshing(false);
+    }
   }
 
   useEffect(() => {
@@ -61,12 +76,12 @@ function ListingsScreen({navigation}: ListingsScreenProps): React.JSX.Element {
             refreshing={refreshing}
             onRefresh={() => setRefreshing(true)}
             data={listings}
-            keyExtractor={listing => listing.id.toString()}
-            renderItem={({item}) => (
+            keyExtractor={(listing) => listing.id.toString()}
+            renderItem={({ item }) => (
               <Card
                 item={item}
                 title={item.title}
-                subTitle={'₹ ' + item.price}
+                subTitle={"₹ " + item.price}
                 imageUrl={item.images[0]}
                 onPress={() =>
                   navigation.navigate(routes.LISTING_DETAILS, item)
@@ -84,7 +99,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     margin: 10,
     color: colors.dark,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   screen: {
     backgroundColor: colors.lightgrey,

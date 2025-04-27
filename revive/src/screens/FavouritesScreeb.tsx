@@ -1,14 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import React, { useEffect, useState } from "react";
+import { FlatList, StyleSheet, View } from "react-native";
 
-import Card from '../components/Card';
-import colors from '../config/colors';
-import routes from '../navigation/routes';
-import Screen from '../components/Screen';
-import ActivityIndicator from '../components/ActivityIndicator';
-import {useIsFocused} from '@react-navigation/native';
-import AppText from '../components/AppText';
-import db from '../db/db';
+import Card from "../components/Card";
+import colors from "../config/colors";
+import routes from "../navigation/routes";
+import Screen from "../components/Screen";
+import ActivityIndicator from "../components/ActivityIndicator";
+import { useIsFocused } from "@react-navigation/native";
+import AppText from "../components/AppText";
+import db from "../firebase/database";
 
 interface Listing {
   id: number;
@@ -22,7 +22,7 @@ interface FavouritesScreenProps {
   navigation: any; // You can type this more precisely if needed
 }
 
-function FavouritesScreen({navigation}: FavouritesScreenProps) {
+function FavouritesScreen({ navigation }: FavouritesScreenProps) {
   let loading = true;
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [listingsa, setListingsa] = useState<Listing[]>([]);
@@ -30,7 +30,7 @@ function FavouritesScreen({navigation}: FavouritesScreenProps) {
     setRefreshing(true);
     const listing = await db.getListings(); // assumed to be an object as you shared before
 
-    const listingsArray: Listing[] = Object.keys(listing).map(key => ({
+    const listingsArray: Listing[] = Object.keys(listing).map((key) => ({
       id: key,
       ...listing[key],
     }));
@@ -45,9 +45,9 @@ function FavouritesScreen({navigation}: FavouritesScreenProps) {
   }, []);
 
   const listings = listingsa.filter(
-    (listing: Listing) => listing.favorite === true,
+    (listing: Listing) => listing.favorite === true
   );
-  console.log(listings, 'found');
+  console.log(listings, "found");
   loading = false;
   const isFocused = useIsFocused();
 
@@ -61,12 +61,12 @@ function FavouritesScreen({navigation}: FavouritesScreenProps) {
               {listings.length !== 0 ? (
                 <FlatList
                   data={listings}
-                  keyExtractor={listing => listing.id.toString()}
-                  renderItem={({item}) => (
+                  keyExtractor={(listing) => listing.id.toString()}
+                  renderItem={({ item }) => (
                     <Card
                       item={item}
                       title={item.title}
-                      subTitle={'$' + item.price}
+                      subTitle={"$" + item.price}
                       imageUrl={item.images[0]}
                       onPress={() =>
                         navigation.navigate(routes.LISTING_DETAILS, item)
@@ -94,8 +94,8 @@ const styles = StyleSheet.create({
   },
   emptyView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
   },
 });
