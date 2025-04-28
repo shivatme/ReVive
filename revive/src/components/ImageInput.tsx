@@ -6,8 +6,8 @@ import {
   TouchableWithoutFeedback,
   Alert,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-// import * as ImagePicker from 'react-native-image-picker';
 
 import colors from "../config/colors";
 
@@ -17,6 +17,17 @@ interface ImageInputProps {
 }
 
 function ImageInput({ imageUri, onChangeImage }: ImageInputProps) {
+  const requestPermission = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      alert("You need to enable permission to access the library.");
+    }
+  };
+
+  useEffect(() => {
+    requestPermission();
+  }, []);
+
   const handlePress = () => {
     if (!imageUri) selectImage();
     else
@@ -31,14 +42,16 @@ function ImageInput({ imageUri, onChangeImage }: ImageInputProps) {
 
   const selectImage = async () => {
     try {
-      // const result = await ImagePicker.launchImageLibrary({
-      //   mediaType: 'photo',
-      //   quality: 0.5,
-      // });
-      //   if (!result.didCancel) onChangeImage(result.assets?[0].uri)
-      console.log("result");
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 0.5,
+      });
+
+      if (!result.canceled) {
+        onChangeImage(result.assets[0].uri);
+      }
     } catch (error) {
-      console.log(error);
+      console.log("Error reading an image", error);
     }
   };
 
